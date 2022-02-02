@@ -20,7 +20,32 @@ module Forecasting
       nil
     end
 
+    def get_zipcode
+      result = call
+      if result && result.class == Geocoder::Result::Nominatim
+        zipcodes = result.postal_code || result.coordinates.to_zip
+        return extract_zipcode zipcodes
+      elsif invalid?
+        return errors.full_messages
+      else
+        zipcodes = @address.to_zip
+        return extract_zipcode zipcodes
+      end
+      nil
+    end
+
     private
+
+    def extract_zipcode(zipcodes)
+      case zipcodes
+      when String
+        return zipcodes
+      when Array
+        return nil if zipcodes.empty?
+        return zipcodes.first
+      end
+      nil
+    end
 
     def call
       return nil if invalid?

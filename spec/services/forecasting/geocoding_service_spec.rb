@@ -13,9 +13,9 @@ RSpec.describe Forecasting::GeocodingService, type: :service do
   let(:statue_of_liberty_coordinates) { [40.7127281, -74.0060152] }
   let(:geo_service) { described_class.new(address: address, country_codes: country_codes) }
 
-  it 'contains 1 public method: get_coordinates' do
+  it 'contains 2 public methods: get_coordinates and ge_zipcode' do
     own_methods = described_class.new.public_methods(false) - ar_validations_methods - attribute_accessor_methods
-    expect(own_methods).to eq([:get_coordinates])
+    expect(own_methods).to eq([:get_coordinates, :get_zipcode])
   end
 
   it 'get_coordinates return 2-dimensional array with floating numbers' do
@@ -25,6 +25,14 @@ RSpec.describe Forecasting::GeocodingService, type: :service do
     expect(result.first).to be_a(Float)
     expect(result.second).to be_a(Float)
     expect(result).to eq(statue_of_liberty_coordinates)
+  end
+
+  it 'get_zipcode return 5 digits number string' do
+    result = geo_service.get_zipcode
+    expect(result).to be_a(String)
+    expect(result.size).to eq(5)
+    expect(result.to_i.between?(9999, 100000)).to eq(true)
+    expect(result).to eq("10005")
   end
 
   it 'country_codes argument is optional' do

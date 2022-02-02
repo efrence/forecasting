@@ -68,6 +68,8 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    area (0.10.0)
+      fastercsv (~> 1.5)
     bindex (0.8.1)
     bootsnap (1.10.2)
       msgpack (~> 1.2)
@@ -98,6 +100,7 @@ GEM
       railties (>= 5.0.0)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
+    fastercsv (1.5.5)
     geocoder (1.7.3)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -248,6 +251,7 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
+  area (~> 0.10)
   bootsnap
   capybara
   connection_pool (~> 2.2)
