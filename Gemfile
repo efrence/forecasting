@@ -37,6 +37,8 @@ gem 'connection_pool', "~>2.2"
 gem 'geocoder', "~>1.7"
 gem 'area', "~>0.10"
 
+gem 'open-weather-ruby-client', "~>0.2"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
