@@ -18,10 +18,22 @@ module RedisPersistable
     def attribute_expireat(attr, fn)
       value attr, expireat: fn
     end
-  end
 
-  def initialize(attrs = {})
-    super()
+    def redis_find_by(attr)
+      define_singleton_method "find_by_#{attr.to_s}" do |value|
+        md5 = Digest::MD5.hexdigest value
+        hash = ActiveSupport::HashWithIndifferentAccess.new
+        attribute_names.each do |attribute|
+          redis_key = "#{name.underscore}:#{md5}:#{attribute}"
+          hash[attribute] = redis.get redis_key
+        end
+        hash
+      end
+
+      define_singleton_method "primary_key" do
+        attr
+      end
+    end
   end
 
   def persisted?
@@ -39,7 +51,7 @@ module RedisPersistable
   def save!
     return false unless valid?
 
-    self.id = Digest::MD5.hexdigest Marshal.dump(temporal_attributes)
+    self.id = Digest::MD5.hexdigest temporal_attributes[self.class.primary_key.to_s]
     attributes.keys.each do |symb|
       self.send("#{symb.to_s}=", self.send("temporal_#{symb.to_s}"))
     end
