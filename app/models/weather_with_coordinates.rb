@@ -4,7 +4,7 @@ class WeatherWithCoordinates
   attribute :temperature_in_celsius
   attribute :coordinates
 
-  include RedisObjects
+  include RedisPersistable
   include ActiveModel::Validations
 
   attribute_expireat :temperature_in_celsius, lambda { Time.now + 30.minutes }

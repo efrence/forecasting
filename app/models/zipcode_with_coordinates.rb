@@ -3,7 +3,7 @@ class ZipcodeWithCoordinates
   attribute :zipcode
   attribute :coordinates
 
-  include RedisObjects
+  include RedisPersistable
   include ActiveModel::Validations
 
   validates_presence_of :temporal_zipcode, :temporal_coordinates
