@@ -15,7 +15,7 @@ RSpec.describe Forecasting::GeocodingService, type: :service do
 
   it 'contains 2 public methods: get_coordinates and ge_zipcode' do
     own_methods = described_class.new.public_methods(false) - ar_validations_methods - attribute_accessor_methods
-    expect(own_methods).to eq([:get_coordinates, :get_zipcode])
+    expect(own_methods.sort).to eq([:get_coordinates, :get_zipcode].sort)
   end
 
   it 'get_coordinates return 2-dimensional array with floating numbers' do
