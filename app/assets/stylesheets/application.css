@@ -13,3 +13,33 @@
  *= require_tree .
  *= require_self
  */
+
+body, html {
+  background-color: #6c5ce7;
+  height: 100%;
+  margin: 0;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.address-input{
+  all: unset;
+  width: 100%;
+  text-align: center;
+  font-size: xx-large;
+  color: #111414;
+  background-color: transparent;
+}
+.address-input::placeholder{
+  color: #2d3436;
+}
+.weather {
+  font-weight: bold;
+  text-align: center;
+  color: #dfe6e9;
+  font-size: xx-large;
+}

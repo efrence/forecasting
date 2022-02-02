@@ -1,0 +1,7 @@
+<div class='form-container'>
+  <form data-controller='weather' data-action='weather#addressChanged'>
+    <input name='address' type='text' data-action='weather#addressChanged' data-weather-target='address' placeholder='Enter your address' class='address-input'>
+    <input type=hidden name="authenticity_token" value="<%= form_authenticity_token %>">
+    <h1 data-weather-target='weather' class='weather'></h1>
+  </form>
+</div>

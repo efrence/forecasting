@@ -7,6 +7,11 @@ class ForecastingController < ApplicationController
   # GET /forecasting/current_weather
   def current_weather
     address = params.permit!.dig("forecasting","address")
+
+    if address.blank?
+      return render :json => {error: "Not a valid address"}, status: :bad_request
+    end
+
     geo_service = Forecasting::GeocodingService.new(address: address)
     @zipcode = geo_service.get_zipcode
 
