@@ -18,7 +18,7 @@ module Forecasting
       if valid?
         return @client.current_weather(zip: @zipcode, country: @country_code, units: get_units).dig("main","temp")
       end
-      nil
+      errors.full_messages
     end
 
     private
