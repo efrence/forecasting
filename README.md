@@ -1,5 +1,3 @@
-# Forecasting app
-## Description
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 Forecasting is a simple app made with `Rails 7.0.1` and `Ruby 2.7.3` that follows domain-driven design to structure the codebase. The domain, in this case, is `Forecasting`.
@@ -10,24 +8,135 @@ Forecasting is a simple app made with `Rails 7.0.1` and `Ruby 2.7.3` that follow
 - Integration with Third-party APIs like `OpenWeatherMap`
 - Weather information is cached for 30 minutes since last request
 - Good test coverage (around 80%)
-- Frontend is decoupled and (almost) ready to be deployed as JAMstack 
+- Frontend is decoupled and (almost) ready to be deployed as a [JAMStack](https://jamstack.org/)
 
 ## Tech
 
 Forecasting uses the standard Ruby on rails modern stack:
 
-- [Rails] - is a server-side web application framework written in Ruby
-- [rspec] - Domain-specific language testing tool written in the programming language Ruby to test Ruby code.
-- [redis] - an in-memory data structure store, used as a distributed, in-memory key–value database and cache solution.
-- [Stimulusjs] - A minimalist JavaScript framework built-in with Rails.
-- [importmaps-rails] - lightweight solution for packaging js assets with Rails.
+- [`Rails`] - is a server-side web application framework written in Ruby
+- [`Rspec`] - Domain-specific language testing tool written in the programming language Ruby to test Ruby code.
+- [`Redis`] - an in-memory data structure store, used as a distributed, in-memory key–value database and cache solution.
+- [`Stimulusjs`] - A minimalist JavaScript framework built-in with Rails.
+- [`importmaps-rails`] - lightweight solution for packaging js assets with Rails.
 
 
 ## Design patterns and architectural decisions
 
 Forecasting is a simple Rails app that follows, for the most part, Rails conventions. In order words, follows Model-View-Controller, Domain-driven design by leveraging [Rails namespaces conventions](https://blog.makandra.com/2014/12/organizing-large-rails-projects-with-namespaces/) and tries to be in complaince with the [12-Factor App principles](https://12factor.net/).
 
-### No Relation Database
+### File Structure
+
+```
+
+├── Gemfile
+├── Gemfile.lock
+├── README.md
+├── Rakefile
+├── app
+│  ├── assets
+│   │   ├── config
+│   │   │   └── manifest.js
+│   │   ├── images
+│   │   └── stylesheets
+│   │       └── application.css
+│   ├── controllers
+│   │   ├── application_controller.rb
+│   │   ├── concerns
+│   │   └── forecasting_controller.rb
+│  ├── helpers
+│   │   └── application_helper.rb
+│  ├── javascript
+│   │   ├── application.js
+│   │   └── controllers
+│   │       ├── application.js
+│   │       ├── forecasting_controller.js
+│   │       └── index.js
+│  ├── models
+│   │   ├── application_record.rb
+│   │   ├── concerns
+│   │   │   └── redis_persistable.rb
+│   │   └── forecasting
+│   │       ├── street_address.rb
+│   │       ├── weather_with_coordinates.rb
+│   │       ├── zipcode_with_coordinates.rb
+│   │       └── zipcode_with_temperature.rb
+│   ├── services
+│   │   └── forecasting
+│   │       ├── geocoding_service.rb
+│   │       └── openweather_service.rb
+│   └── views
+│       ├── forecasting
+│       │   └── new.html.erb
+│       └── layouts
+│           ├── application.html.erb
+│           ├── mailer.html.erb
+│           └── mailer.text.erb
+| ── config
+│   ├── application.rb
+│   ├── boot.rb
+│   ├── cable.yml
+│   ├── credentials.yml.enc
+│   ├── database.yml
+│   ├── environment.rb
+│   ├── environments
+│   │   ├── development.rb
+│   │   ├── production.rb
+│   │   └── test.rb
+│   ├── importmap.rb
+│   ├── initializers
+│   │   ├── assets.rb
+│   │   ├── content_security_policy.rb
+│   │   ├── filter_parameter_logging.rb
+│   │   ├── inflections.rb
+│   │   ├── permissions_policy.rb
+│   │   └── redis.rb
+│   ├── locales
+│   │   └── en.yml
+│   ├── master.key
+│   ├── puma.rb
+│   ├── redis.yml
+│   ├── routes.rb
+│   └── storage.yml
+├── spec
+│   ├── factories.rb
+│   ├── helpers
+│   ├── models
+│   │   └── forecasting
+│   │       ├── street_address_spec.rb
+│   │       ├── weather_with_coordinates_spec.rb
+│   │       ├── zipcode_with_coordinates_spec.rb
+│   │       └── zipcode_with_temperature_spec.rb
+│   ├── rails_helper.rb
+│   ├── requests
+│   │   └── forecasting_spec.rb
+│   ├── services
+│   │   └── forecasting
+│   │       ├── geocoding_service_spec.rb
+│   │       └── openweather_service_spec.rb
+│   ├── shared_examples
+│   │   └── redis_persistable.rb
+│   ├── spec_helper.rb
+│   └── support
+│       ├── chrome.rb
+│       └── factory_bot.rb
+├── test
+│   ├── application_system_test_case.rb
+│   ├── channels
+│   │   └── application_cable
+│   │       └── connection_test.rb
+│   ├── controllers
+│   ├── fixtures
+│   │   └── files
+│   ├── helpers
+│   ├── models
+│   ├── system
+│   │   └── forecasting_test.rb
+│   └── test_helper.rb
+```
+
+
+### No Relational Database design
 
 Perhaps the only departure from the typical Rails app it is the fact that, at least for the time being, Forecasting it is not making use of a relational database for storing information. This could be confusing since Rails requires kind of strictly to setup a DB before even lauching the server. The reasoning behind this is very simple, Forecasting, at least the this moment, doesn't require to count with a permanent persistance mechanism since there is no critical data needed for its operation. Other than cache data, that BTW it is stored with Redis, there is `Activerecord` model to found (or migration, etc). Having said that, it is very likely that a Relational db will be required for future features and that's why the dependency it is still listed in the `Gemfile` file.
 
@@ -77,7 +186,7 @@ Then you can open it and edit it, in order to add you own `openweather_api_keys`
 EDITOR=vim rails credentials:edit
 ```
 
-## Run on development
+## Run in development
 
 It is easy to be up and running with Forecasting, just open your favorite terminal and run this command:
 
