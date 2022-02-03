@@ -138,7 +138,7 @@ Forecasting is a simple Rails app that follows, for the most part, Rails convent
 
 ### No Relational Database design
 
-Perhaps the only departure from the typical Rails app it is the fact that, at least for the time being, Forecasting it is not making use of a relational database for storing information. This could be confusing since Rails requires kind of strictly to setup a DB before even lauching the server. The reasoning behind this is very simple, Forecasting, at least the this moment, doesn't require to count with a permanent persistance mechanism since there is no critical data needed for its operation. Other than cache data, that BTW it is stored with Redis, there is `Activerecord` model to found (or migration, etc). Having said that, it is very likely that a Relational db will be required for future features and that's why the dependency it is still listed in the `Gemfile` file.
+Perhaps the only departure from the typical Rails app it is the fact that, at least for the time being, Forecasting it is not making use of a relational database for storing information. This could be confusing since Rails requires kind of strictly to setup a DB before even lauching the server. The reasoning behind this is very simple, Forecasting, at least for the moment, doesn't require to count with a permanent persistance mechanism since there is no critical data needed for its operation. Other than cache data, that BTW it is stored with Redis, there is no `Activerecord` model to found (nor migration files, etc). Having said that, it is very likely that a Relational db will be required latter on for future features in the future and that's why the dependency it is still listed in the `Gemfile` file.
 
 ## Installation and prerequirements
 
