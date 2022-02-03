@@ -1,12 +1,12 @@
 import { Controller } from '@hotwired/stimulus';
 import axios from 'axios';
 import debounce from 'debounce';
+import $ from 'jquery';
 
 export default class extends Controller {
   static targets = ['weather', 'address'];
 
   initialize() {
-    console.log('debug');
     this.debouncedFetchWeather = debounce(this.fetchWeather, 500);
   }
   addressChanged(e) {
@@ -22,17 +22,15 @@ export default class extends Controller {
       },
       {
         headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"').getAttribute('content'),
+          'X-CSRF-Token': $('#csrf-token').value,
           'Content-Type': 'application/json'
         },
       }
     ).catch(
       (error) => {
         this.weatherTarget.textContent = '';
-        console.log(error);
       }
     );
-    console.log(response);
     if (response.status == 200 && response.data) {
       this.displayWeather(response.data.address, response.data.zipcode, response.data.temp_c);
     } else {
