@@ -6,7 +6,7 @@ class ForecastingController < ApplicationController
 
   # GET /forecasting/current_weather
   def current_weather
-    address = params.permit!.dig("forecasting","address")
+    address = permitted_params.dig(:address)
 
     if address.blank?
       return render :json => {error: "Not a valid address"}, status: :bad_request
@@ -28,11 +28,9 @@ class ForecastingController < ApplicationController
       if @not_found
         return render :json => {message: 'Resource not found' }, :status => 404
       end
-    else
-      @cached = true
     end
 
-    if @temperature
+    if @temperature && !@cached
       cache_values
     end
 
@@ -41,11 +39,15 @@ class ForecastingController < ApplicationController
 
   private
 
+  def permitted_params
+    params.require(:forecasting).permit(:address)
+  end
+
   def retrieve_temp
     begin
       weather_service = Forecasting::OpenweatherService.new(zipcode: @zipcode)
       @temperature = weather_service.get_temperature
-    rescue Faraday::ResourceNotFound
+    rescue Faraday::ResourceNotFound, OpenWeather::Errors::Fault
       # TODO log error
       @not_found = true
     end
@@ -53,6 +55,7 @@ class ForecastingController < ApplicationController
 
   def get_temp_cached_value
     redis_hash = Forecasting::ZipcodeWithTemperature.find_by_zipcode @zipcode
+    @cached = true if redis_hash["temperature"].present?
     redis_hash["temperature"]
   end
 
