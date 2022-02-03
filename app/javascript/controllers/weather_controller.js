@@ -1,13 +1,13 @@
 import { Controller } from '@hotwired/stimulus';
 import axios from 'axios';
 import debounce from 'debounce';
-import $ from 'jquery';
 
 export default class extends Controller {
   static targets = ['weather', 'address'];
 
   initialize() {
     this.debouncedFetchWeather = debounce(this.fetchWeather, 500);
+    this.token = document.getElementById('csrf-token').value;
   }
   addressChanged(e) {
     e.preventDefault();
@@ -22,7 +22,7 @@ export default class extends Controller {
       },
       {
         headers: {
-          'X-CSRF-Token': $('#csrf-token').value,
+          'X-CSRF-Token': this.token,
           'Content-Type': 'application/json'
         },
       }
