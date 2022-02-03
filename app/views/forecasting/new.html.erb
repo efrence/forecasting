@@ -1,7 +1,7 @@
 <div class='form-container'>
-  <form data-controller='weather' data-action='weather#addressChanged'>
-    <input name='address' type='text' data-action='weather#addressChanged' data-weather-target='address' placeholder='Enter your address' class='address-input'>
+  <form data-controller='forecasting' data-action='forecasting#addressChanged'>
+    <input name='address' type='text' data-action='forecasting#addressChanged' data-forecasting-target='address' placeholder='Enter your address' class='address-input'>
     <input id="csrf-token" type=hidden name="authenticity_token" value="<%= form_authenticity_token %>">
-    <h1 id="test-temp-output" data-weather-target='weather' class='weather'></h1>
+    <h1 id="test-temp-output" data-forecasting-target='forecasting' class='weather'></h1>
   </form>
 </div>
