@@ -16,7 +16,9 @@ shared_examples_for 'redis_persistable' do
   describe '#add_find_by_primary_key' do
     it 'should add a new valid? method' do
       attribute_name = described_class.primary_key
-      expect(described_class.send("find_by_#{attribute_name}", resource.send("temporal_#{attribute_name}"))).to be_a(Hash)
+      result = described_class.send("find_by_#{attribute_name}", resource.send("temporal_#{attribute_name}"))
+      expect(result).to be_a(Hash)
+      expect(result[attribute_name]).to_not be_nil
     end
   end
 end

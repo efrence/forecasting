@@ -24,7 +24,7 @@ module RedisPersistable
         md5 = Digest::MD5.hexdigest value
         hash = ActiveSupport::HashWithIndifferentAccess.new
         attribute_names.each do |attribute|
-          redis_key = "#{name.underscore.split('/').last}:#{md5}:#{attribute}"
+          redis_key = "#{name.demodulize.underscore}:#{md5}:#{attribute}"
           hash[attribute] = redis.get redis_key
         end
         hash
