@@ -21,17 +21,21 @@ Forecasting uses the standard Ruby on rails modern stack:
 - [importmaps-rails] - lightweight solution for packaging js assets with Rails.
 - [rspec] - Domain-specific language testing tool written in the programming language Ruby to test Ruby code.
 - [redis] - an in-memory data structure store, used as a distributed, in-memory key–value database and cache solution.
-- 
+
 
 ## Design patterns and architectural decisions
 
 Forecasting is a simple Rails app that follows, for the most part, Rails conventions. In order words, follows Model-View-Controller, Domain-driven design by leveraging [Rails namespaces conventions](https://blog.makandra.com/2014/12/organizing-large-rails-projects-with-namespaces/) and tries to be complain with [12-Factor App principles](https://12factor.net/)
 
+### No Relation Database
+
+Perhaps the only departure from the typical Rails app it is the fact, at least for the time being, Forecasting it is not making use of a relation database for storing information. This could be confusing since Rails requires kind of strictly to setup a DB before even lauching the server. The reasoning behind this is very simple, Forecasting, at least the this moment, doesn't require to count with a permanent persistance mechanism since there is no critical data needed for its operation. Other than cache data, that BTW it is stored with Redis, there is `Activerecord` model to found (or migration, etc). Having said that, it is very likely that a Relational db will be required for future features and that's why the dependency it is still listed in the `Gemfile` file.
+
 ## Installation and prerequirements
 
 Forecasting requires [Ruby](https://www.ruby-lang.org/en/) 2.5+, [bundler](https://bundler.io/) 2.0+, redis and postgresql to run
 
-Install the dependencies and devDependencies and before starting the server.
+Install the dependencies and devDependencies before starting the server by issuing the following commands:
 
 ```sh
 brew install redis
@@ -45,7 +49,7 @@ rake db:create
 ## Configuration
 
 ### Postgresql and Redis
-It is using default database configuration so not need to change `config/database.yml` because it is using redis for all data it needs. On another hand, if you need to change redis configuration, edit `config/redis.yml` file. For development purposes should work with default host 127.0.0.1 port 6379. 
+It is using default database configuration so not need to change `config/database.yml` because it is using redis for all the data it needs. On another hand, if you need to change redis configuration, edit `config/redis.yml` file. For development purposes should work with default host `127.0.0.1` port `6379`. 
 
 ## Secrets
 Forecasting uses rails secrets for storing sensitive information like the API key for Geocoding and Openweather services.
