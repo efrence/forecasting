@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-Forecasting is a simple app made with `Rails 7.0.1` and `Ruby 2.7.3` that follows domain-driven design to structure the codebase. The domain, in this case, is `Forecasting`.
+Forecasting is a simple app that retrieves forecast data for a given address and displays it back to the user in a friendly manner. It is made with `Rails 7.0.1` and `Ruby 2.7.3`.
 
 ## Features
 
